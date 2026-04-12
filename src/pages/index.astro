@@ -14,132 +14,156 @@ if (posts.length > 0) {
   featuredPost = posts.find(p => p.data.featured) || posts[0];
   regularPosts = posts.filter(p => p.slug !== featuredPost?.slug);
 }
+
+const securityPosts = posts.filter(p => p.data.category === 'Security').slice(0, 3);
+const windowsPosts = posts.filter(p => p.data.category === 'Windows').slice(0, 3);
 ---
 
-<BaseLayout title={SITE_CONFIG.name} description={SITE_CONFIG.description} type="website" showVideo={true}>
-  <!-- Hero Section -->
-  <section class="relative min-h-[70vh] flex items-center justify-center text-center mb-16">
-    <div class="max-w-4xl mx-auto px-4">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm mb-8">
-        <span class="w-2 h-2 rounded-full bg-violet-400 animate-pulse"></span>
-        Insights & Perspectives
-      </div>
-      <h1 class="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white mb-6 leading-tight tracking-tight">
-        Atenololn
-        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-teal-400">Review</span>
-      </h1>
-      <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed mb-10">
-        {SITE_CONFIG.description}
-      </p>
-      <div class="flex flex-wrap justify-center gap-4">
-        <a href="#articles" class="inline-flex items-center px-8 py-4 bg-violet-600 hover:bg-violet-500 text-white font-medium rounded-lg transition-all hover:scale-105">
-          Explore Articles
-          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-        </a>
-        <a href="/blog" class="inline-flex items-center px-8 py-4 bg-slate-800/50 hover:bg-slate-800 text-white font-medium rounded-lg transition-all border border-slate-700">
-          View All
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats Bar -->
-  <section class="border-y border-violet-800/20 py-8 mb-16 bg-slate-950/30 backdrop-blur-sm">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-      <div>
-        <div class="text-3xl font-heading font-bold text-violet-400">{posts.length}+</div>
-        <div class="text-sm text-slate-400 mt-1">Articles</div>
-      </div>
-      <div>
-        <div class="text-3xl font-heading font-bold text-teal-400">Daily</div>
-        <div class="text-sm text-slate-400 mt-1">Updates</div>
-      </div>
-      <div>
-        <div class="text-3xl font-heading font-bold text-pink-400">Expert</div>
-        <div class="text-sm text-slate-400 mt-1">Insights</div>
-      </div>
-      <div>
-        <div class="text-3xl font-heading font-bold text-amber-400">Global</div>
-        <div class="text-sm text-slate-400 mt-1">Reach</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Featured Post -->
-  {featuredPost && (
-    <section class="mb-20">
-      <div class="flex items-center gap-4 mb-8">
-        <div class="h-px flex-1 bg-gradient-to-r from-transparent to-violet-800/50"></div>
-        <span class="text-violet-400 text-sm font-medium tracking-wider uppercase">Featured</span>
-        <div class="h-px flex-1 bg-gradient-to-l from-transparent to-violet-800/50"></div>
-      </div>
-      <a href={`/blog/${featuredPost.slug}/`} class="group block">
-        <article class="relative rounded-2xl overflow-hidden border border-violet-800/20 bg-slate-900/40 backdrop-blur-sm">
-          <div class="grid md:grid-cols-2 gap-0">
-            <div class="aspect-video md:aspect-auto overflow-hidden">
-              <img 
-                src={featuredPost.data.coverImage} 
-                alt={featuredPost.data.title}
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-              />
-            </div>
-            <div class="p-8 md:p-12 flex flex-col justify-center">
-              <span class="text-violet-400 text-sm font-medium tracking-wider uppercase mb-4">{featuredPost.data.category}</span>
-              <h2 class="text-3xl md:text-4xl font-heading font-bold text-white mb-4 group-hover:text-violet-300 transition-colors leading-tight">
-                {featuredPost.data.title}
-              </h2>
-              <p class="text-slate-400 text-lg leading-relaxed mb-6">{featuredPost.data.description}</p>
-              <div class="flex items-center gap-4 text-sm text-slate-500">
-                <span>{featuredPost.data.author}</span>
-                <span class="w-1 h-1 rounded-full bg-slate-600"></span>
-                <time datetime={featuredPost.data.pubDate.toISOString()}>
-                  {featuredPost.data.pubDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-                </time>
-              </div>
-            </div>
+<BaseLayout title={SITE_CONFIG.name} description={SITE_CONFIG.description} type="website" breadcrumbs={[]}>
+  <!-- Hero Section - Tech Style -->
+  <section class="relative bg-gradient-to-br from-emerald-900 via-slate-900 to-slate-950 border-b border-emerald-800/30 mb-12">
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNMzYgMzRoLTJ2LTRoMnY0em0wLTh2LTJoLTJ2Mmgyem0tOCA4aC00djJoNHYtMnptLTgtOGgtMnY0aDJ2LTR6bTAgOHYtMmgtMnYyaDJ6IiBmaWxsPSIjMTBiOTgxIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz48L2c+PC9zdmc+')] opacity-50"></div>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 relative">
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-mono mb-6">
+          <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+          SYSTEM PROTECTION ACTIVE
+        </div>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-6 leading-tight tracking-tight">
+          Secure Your
+          <span class="text-emerald-400 block">Windows PC</span>
+        </h1>
+        <p class="text-lg md:text-xl text-slate-400 mb-8 max-w-2xl leading-relaxed">
+          {SITE_CONFIG.description}
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="#articles" class="inline-flex items-center px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded transition-colors font-heading tracking-wide">
+            Browse Guides
+          </a>
+          <a href="/blog" class="inline-flex items-center px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded transition-colors border border-slate-700">
+            All Articles
+          </a>
+        </div>
+        
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-8 mt-12 pt-8 border-t border-slate-800">
+          <div>
+            <div class="text-3xl font-heading font-bold text-emerald-400">{posts.length}+</div>
+            <div class="text-sm text-slate-500 mt-1">Security Guides</div>
           </div>
-        </article>
-      </a>
-    </section>
-  )}
-
-  <!-- Articles Grid -->
-  <section id="articles" class="py-8">
-    <div class="flex items-center justify-between mb-10">
-      <h2 class="text-2xl font-heading font-bold text-white">Latest Articles</h2>
-      <a href="/blog" class="text-violet-400 hover:text-violet-300 text-sm font-medium transition-colors">
-        View All →
-      </a>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      {regularPosts.slice(0, 8).map(post => <PostCard post={post} variant="default" />)}
-    </div>
-    
-    {regularPosts.length > 8 && (
-      <div class="text-center mt-12">
-        <a href="/blog" class="inline-flex items-center px-6 py-3 border border-violet-800/50 text-violet-300 hover:bg-violet-900/20 rounded-lg transition-colors">
-          View All {regularPosts.length} Articles
-        </a>
+          <div>
+            <div class="text-3xl font-heading font-bold text-cyan-400">100%</div>
+            <div class="text-sm text-slate-500 mt-1">Free Resources</div>
+          </div>
+          <div>
+            <div class="text-3xl font-heading font-bold text-white">24/7</div>
+            <div class="text-sm text-slate-500 mt-1">Protection</div>
+          </div>
+        </div>
       </div>
-    )}
-  </section>
-
-  <!-- Newsletter -->
-  <section class="mt-20 p-8 md:p-12 rounded-2xl bg-gradient-to-br from-violet-900/20 to-slate-900/40 border border-violet-800/20 backdrop-blur-sm">
-    <div class="max-w-2xl mx-auto text-center">
-      <h2 class="text-3xl font-heading font-bold text-white mb-4">Stay Informed</h2>
-      <p class="text-slate-400 mb-8">Get the latest insights delivered to your inbox. No spam, just quality content.</p>
-      <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-        <input 
-          type="email" 
-          placeholder="Enter your email" 
-          class="flex-1 px-5 py-3 bg-slate-950/50 border border-violet-800/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-violet-500"
-        />
-        <button type="submit" class="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white font-medium rounded-lg transition-colors">
-          Subscribe
-        </button>
-      </form>
     </div>
   </section>
+
+  <div class="grid lg:grid-cols-3 gap-8">
+    <!-- Main Content -->
+    <div class="lg:col-span-2">
+      <!-- Featured Post -->
+      {featuredPost && (
+        <section class="mb-12">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-1 h-6 bg-emerald-500 rounded"></div>
+            <h2 class="text-xl font-heading font-bold text-white">Featured Guide</h2>
+          </div>
+          <a href={`/blog/${featuredPost.slug}/`} class="group block">
+            <article class="bg-slate-900/50 border border-emerald-800/20 rounded-lg overflow-hidden hover:border-emerald-700/40 transition-all">
+              <div class="grid md:grid-cols-2 gap-0">
+                <div class="aspect-video md:aspect-auto overflow-hidden">
+                  <img 
+                    src={featuredPost.data.coverImage} 
+                    alt={featuredPost.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div class="p-6 flex flex-col justify-center">
+                  <span class="text-emerald-400 text-xs font-mono uppercase tracking-wider mb-2">{featuredPost.data.category}</span>
+                  <h3 class="text-2xl font-heading font-bold text-white mb-3 group-hover:text-emerald-300 transition-colors">
+                    {featuredPost.data.title}
+                  </h3>
+                  <p class="text-slate-400 text-sm mb-4">{featuredPost.data.description}</p>
+                  <span class="text-emerald-500 text-sm font-medium group-hover:text-emerald-400 transition-colors">Read Guide →</span>
+                </div>
+              </div>
+            </article>
+          </a>
+        </section>
+      )}
+
+      <!-- Latest Articles -->
+      <section id="articles">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-1 h-6 bg-cyan-500 rounded"></div>
+          <h2 class="text-xl font-heading font-bold text-white">Latest Security Guides</h2>
+        </div>
+        <div class="space-y-6">
+          {regularPosts.slice(0, 5).map(post => <PostCard post={post} variant="horizontal" />)}
+        </div>
+        <div class="mt-8 text-center">
+          <a href="/blog" class="inline-flex items-center px-6 py-3 border border-emerald-800/50 text-emerald-400 hover:bg-emerald-900/20 rounded transition-colors">
+            View All {posts.length} Articles
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="space-y-8">
+      <!-- Security Category -->
+      <div class="bg-slate-900/50 border border-emerald-800/20 rounded-lg p-6">
+        <h3 class="text-lg font-heading font-bold text-white mb-4 flex items-center gap-2">
+          <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+          Security
+        </h3>
+        <div class="space-y-3">
+          {securityPosts.map(post => (
+            <a href={`/blog/${post.slug}/`} class="group block">
+              <h4 class="text-sm text-slate-300 group-hover:text-emerald-400 transition-colors line-clamp-2">{post.data.title}</h4>
+              <span class="text-xs text-slate-500">{post.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Windows Category -->
+      <div class="bg-slate-900/50 border border-cyan-800/20 rounded-lg p-6">
+        <h3 class="text-lg font-heading font-bold text-white mb-4 flex items-center gap-2">
+          <span class="w-2 h-2 bg-cyan-500 rounded-full"></span>
+          Windows
+        </h3>
+        <div class="space-y-3">
+          {windowsPosts.map(post => (
+            <a href={`/blog/${post.slug}/`} class="group block">
+              <h4 class="text-sm text-slate-300 group-hover:text-cyan-400 transition-colors line-clamp-2">{post.data.title}</h4>
+              <span class="text-xs text-slate-500">{post.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="bg-gradient-to-br from-emerald-900/30 to-slate-900/50 border border-emerald-800/20 rounded-lg p-6">
+        <h3 class="text-lg font-heading font-bold text-white mb-2">Security Alerts</h3>
+        <p class="text-sm text-slate-400 mb-4">Get notified about new threats and protection guides.</p>
+        <form class="space-y-3">
+          <input 
+            type="email" 
+            placeholder="your@email.com" 
+            class="w-full px-4 py-2 bg-slate-950 border border-emerald-800/30 rounded text-white text-sm placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+          />
+          <button type="submit" class="w-full px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded transition-colors">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </aside>
+  </div>
 </BaseLayout>
