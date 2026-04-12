@@ -11,7 +11,7 @@ const postUrl = `/blog/${slug}/`;
 ---
 
 {variant === 'default' && (
-  <article class="bg-slate-900/50 border border-emerald-800/20 rounded-lg overflow-hidden hover:border-emerald-700/40 transition-all group">
+  <article class="bg-slate-800/50 border border-emerald-700/20 rounded-lg overflow-hidden hover:border-emerald-600/40 transition-all group">
     {data.coverImage && (
       <a href={postUrl} class="block aspect-video overflow-hidden">
         <img src={data.coverImage} alt={data.coverAlt || data.title} width={600} height={340} class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
@@ -20,19 +20,19 @@ const postUrl = `/blog/${slug}/`;
     <div class="p-5">
       <div class="flex items-center gap-2 mb-3">
         <span class="text-xs font-mono text-emerald-400 uppercase tracking-wider">{data.category}</span>
-        <span class="text-slate-600">•</span>
-        <span class="text-xs text-slate-500">{formattedDate}</span>
+        <span class="text-slate-500">•</span>
+        <span class="text-xs text-slate-400">{formattedDate}</span>
       </div>
       <h2 class="text-lg font-heading font-bold text-white mb-2 line-clamp-2 group-hover:text-emerald-300 transition-colors">
         <a href={postUrl}>{data.title}</a>
       </h2>
-      {data.description && <p class="text-slate-400 text-sm line-clamp-3">{data.description}</p>}
+      {data.description && <p class="text-slate-300 text-sm line-clamp-3">{data.description}</p>}
     </div>
   </article>
 )}
 
 {variant === 'horizontal' && (
-  <article class="bg-slate-900/50 border border-emerald-800/20 rounded-lg overflow-hidden hover:border-emerald-700/40 transition-all group flex flex-col sm:flex-row">
+  <article class="bg-slate-800/50 border border-emerald-700/20 rounded-lg overflow-hidden hover:border-emerald-600/40 transition-all group flex flex-col sm:flex-row">
     {data.coverImage && (
       <a href={postUrl} class="block sm:w-48 lg:w-56 aspect-video sm:aspect-square overflow-hidden flex-shrink-0">
         <img src={data.coverImage} alt={data.coverAlt || data.title} width={400} height={300} class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
@@ -41,24 +41,24 @@ const postUrl = `/blog/${slug}/`;
     <div class="p-5 flex-1 flex flex-col justify-center">
       <div class="flex items-center gap-2 mb-2">
         <span class="text-xs font-mono text-emerald-400 uppercase tracking-wider">{data.category}</span>
-        <span class="text-slate-600">•</span>
-        <span class="text-xs text-slate-500">{formattedDate}</span>
+        <span class="text-slate-500">•</span>
+        <span class="text-xs text-slate-400">{formattedDate}</span>
       </div>
       <h2 class="text-xl font-heading font-bold text-white mb-2 group-hover:text-emerald-300 transition-colors">
         <a href={postUrl}>{data.title}</a>
       </h2>
-      {data.description && <p class="text-slate-400 text-sm line-clamp-2">{data.description}</p>}
+      {data.description && <p class="text-slate-300 text-sm line-clamp-2">{data.description}</p>}
     </div>
   </article>
 )}
 
 {variant === 'compact' && (
   <article class="group">
-    <a href={postUrl} class="block p-4 bg-slate-900/30 border border-emerald-800/10 rounded-lg hover:bg-slate-900/50 hover:border-emerald-800/30 transition-all">
+    <a href={postUrl} class="block p-4 bg-slate-800/30 border border-emerald-700/10 rounded-lg hover:bg-slate-800/50 hover:border-emerald-700/30 transition-all">
       <div class="flex items-center gap-2 mb-2">
         <span class="text-xs font-mono text-emerald-400">{data.category}</span>
-        <span class="text-slate-600">•</span>
-        <span class="text-xs text-slate-500">{readingTime} min</span>
+        <span class="text-slate-500">•</span>
+        <span class="text-xs text-slate-400">{readingTime} min</span>
       </div>
       <h3 class="text-base font-heading font-bold text-white group-hover:text-emerald-300 transition-colors line-clamp-2">
         {data.title}

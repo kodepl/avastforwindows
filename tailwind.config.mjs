@@ -17,17 +17,12 @@ export default {
           400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2', 700: '#0e7490',
           800: '#155e75', 900: '#164e63', 950: '#083344',
         },
-        accent: {
-          50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74',
-          400: '#fb923c', 500: '#f97316', 600: '#ea580c', 700: '#c2410c',
-          800: '#9a3412', 900: '#7c2d12', 950: '#431407',
-        },
-        text: { primary: '#f1f5f9', secondary: '#cbd5e1', muted: '#94a3b8' },
-        surface: { DEFAULT: '#020617', alt: '#0f172a', dark: '#000000' },
+        text: { primary: '#f8fafc', secondary: '#e2e8f0', muted: '#94a3b8' },
+        surface: { DEFAULT: '#0f172a', alt: '#1e293b', dark: '#020617' },
       },
       fontFamily: {
-        heading: ['Orbitron', 'system-ui', 'sans-serif'],
-        body: ['Rajdhani', 'system-ui', 'sans-serif'],
+        heading: ['Rajdhani', 'system-ui', 'sans-serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       container: {
