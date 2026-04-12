@@ -1,0 +1,28 @@
+---
+import { LAYOUT_CONFIG } from '../pbn-config';
+interface BreadcrumbItem { name: string; url: string; current?: boolean; }
+interface Props { items: BreadcrumbItem[]; class?: string; }
+const { items, class: className = '' } = Astro.props;
+if (!LAYOUT_CONFIG.showBreadcrumbs) return null;
+---
+
+<nav aria-label="Breadcrumb" class={`${LAYOUT_CONFIG.getPrefixedClass('breadcrumbs')} py-4 ${className}`}>
+  <ol class="flex flex-wrap items-center gap-2 text-sm" itemscope itemtype="https://schema.org/BreadcrumbList">
+    <li class="flex items-center" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a href="/" class={`${LAYOUT_CONFIG.colors.linkColor} ${LAYOUT_CONFIG.colors.linkHover} transition-colors`} itemprop="item"><span itemprop="name">Home</span></a>
+      <meta itemprop="position" content="1" />
+      <svg class="mx-2 h-4 w-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+    </li>
+    {items.map((item, index) => (
+      <li class="flex items-center" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        {!item.current ? (
+          <>
+            <a href={item.url} class={`${LAYOUT_CONFIG.colors.linkColor} ${LAYOUT_CONFIG.colors.linkHover} transition-colors`} itemprop="item"><span itemprop="name">{item.name}</span></a>
+            <meta itemprop="position" content={String(index + 2)} />
+            {index < items.length - 1 && <svg class="mx-2 h-4 w-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>}
+          </>
+        ) : (<><span class="text-slate-500 font-medium" aria-current="page" itemprop="name">{item.name}</span><meta itemprop="position" content={String(index + 2)} /></>)}
+      </li>
+    ))}
+  </ol>
+</nav>

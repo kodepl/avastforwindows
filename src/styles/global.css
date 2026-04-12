@@ -1,0 +1,347 @@
+/* ============================================
+   GLOBALNE STYLE CSS
+   ============================================
+   Ten plik zawiera globalne style dla projektu.
+   Zawiera reset CSS, klasy pomocnicze i style
+   dla treści Markdown (prose).
+   
+   NIE EDYTUJ BEZPOŚREDNIO - zmieniaj raczej
+   tailwind.config.mjs dla konfiguracji!
+   ============================================ */
+
+/* ==========================================
+   TAILWIND DIRECTIVES
+   ========================================== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================
+   BASE STYLES - RESET I TYPOGRAFIA
+   ========================================== */
+@layer base {
+  /* Box sizing dla wszystkich elementów */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Usuń domyślne marginesy */
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* HTML i body - podstawowe ustawienia */
+  html {
+    -webkit-text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    tab-size: 4;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Obrazy - responsywne i bez odstępów */
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Formularze - dziedziczenie czcionek */
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  /* Tekst - overflow */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+  }
+
+  /* Linki - podstawowe style */
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  /* Listy - bez styli */
+  ul,
+  ol {
+    list-style: none;
+  }
+
+  /* Nagłówki - reset wag */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: inherit;
+  }
+
+  /* Tabela - domyślne style */
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+}
+
+/* ==========================================
+   COMPONENTS - KLASY KOMPONENTÓW
+   ========================================== */
+@layer components {
+  /* Kontener treści artykułu (prose) */
+  .prose {
+    @apply max-w-none;
+  }
+
+  /* Nagłówki w treści */
+  .prose h1 {
+    @apply text-3xl md:text-4xl font-bold text-gray-900 mt-8 mb-4 leading-tight;
+  }
+
+  .prose h2 {
+    @apply text-2xl md:text-3xl font-bold text-gray-900 mt-8 mb-4 leading-tight;
+  }
+
+  .prose h3 {
+    @apply text-xl md:text-2xl font-bold text-gray-900 mt-6 mb-3 leading-tight;
+  }
+
+  .prose h4 {
+    @apply text-lg md:text-xl font-bold text-gray-900 mt-6 mb-3;
+  }
+
+  /* Akapity */
+  .prose p {
+    @apply text-gray-700 leading-relaxed mb-4;
+  }
+
+  /* Linki w treści */
+  .prose a {
+    @apply text-primary-600 font-medium underline underline-offset-2 hover:text-primary-700 transition-colors;
+  }
+
+  /* Listy */
+  .prose ul {
+    @apply list-disc pl-6 mb-4 space-y-2;
+  }
+
+  .prose ol {
+    @apply list-decimal pl-6 mb-4 space-y-2;
+  }
+
+  .prose li {
+    @apply text-gray-700;
+  }
+
+  /* Cytaty */
+  .prose blockquote {
+    @apply border-l-4 border-primary-500 pl-4 italic text-gray-600 my-6;
+  }
+
+  /* Kod inline */
+  .prose code {
+    @apply bg-gray-100 text-primary-700 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+
+  /* Bloki kodu */
+  .prose pre {
+    @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-6;
+  }
+
+  .prose pre code {
+    @apply bg-transparent text-inherit p-0;
+  }
+
+  /* Tabele */
+  .prose table {
+    @apply w-full my-6;
+  }
+
+  .prose th {
+    @apply bg-gray-100 font-semibold text-gray-900 p-3 text-left border-b-2 border-gray-200;
+  }
+
+  .prose td {
+    @apply p-3 border-b border-gray-100;
+  }
+
+  /* Obrazy w treści */
+  .prose img {
+    @apply rounded-lg my-6 mx-auto;
+  }
+
+  /* Podpisy pod obrazkami */
+  .prose figcaption {
+    @apply text-center text-sm text-gray-500 mt-2;
+  }
+
+  /* Horyzontalna linia */
+  .prose hr {
+    @apply my-8 border-gray-200;
+  }
+
+  /* Pogrubienie i kursywa */
+  .prose strong {
+    @apply font-bold text-gray-900;
+  }
+
+  .prose em {
+    @apply italic;
+  }
+
+  /* Małe teksty */
+  .prose small {
+    @apply text-sm text-gray-500;
+  }
+
+  /* Skróty */
+  .prose abbr {
+    @apply border-b border-dotted border-gray-400 cursor-help;
+  }
+}
+
+/* ==========================================
+   UTILITIES - KLASY POMOCNICZE
+   ========================================== */
+@layer utilities {
+  /* Ukrywanie tekstu ale dostępne dla czytników */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  /* Line clamp - ograniczenie liczby linii */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Aspect ratio utilities */
+  .aspect-video {
+    aspect-ratio: 16 / 9;
+  }
+
+  .aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+
+  /* Transition utilities */
+  .transition-default {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  /* Focus styles dla dostępności */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+}
+
+/* ==========================================
+   PRINT STYLES
+   ========================================== */
+@media print {
+  /* Ukryj niepotrzebne elementy */
+  header,
+  footer,
+  aside,
+  nav,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Podstawowe style dla druku */
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+  }
+
+  /* Linki - pokaż URL */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+    color: #666;
+  }
+
+  /* Podziały strony */
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  img {
+    page-break-inside: avoid;
+    max-width: 100% !important;
+  }
+
+  /* Marginesy */
+  @page {
+    margin: 2cm;
+  }
+}
+
+/* ==========================================
+   SCROLLBAR STYLES (opcjonalne)
+   ========================================== */
+/* Chrome, Safari, Edge */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}

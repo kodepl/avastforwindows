@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostCard from '../../../components/PostCard.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import { SITE_CONFIG, LAYOUT_CONFIG } from '../../../pbn-config';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const allTags = new Map<string, string>();
+  posts.forEach(post => { post.data.tags?.forEach(tag => { const slug = tag.toLowerCase().replace(/\s+/g, '-'); allTags.set(slug, tag); }); });
+  return Array.from(allTags.entries()).map(([slug, originalName]) => {
+    const taggedPosts = posts.filter(post => post.data.tags?.some(t => t.toLowerCase().replace(/\s+/g, '-') === slug));
+    return { params: { tag: slug }, props: { posts: taggedPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()), tagName: originalName, totalPosts: taggedPosts.length } };
+  });
+}
+
+const { tag } = Astro.params;
+const { posts, tagName, totalPosts } = Astro.props;
+const title = `Articles tagged "${tagName}"`;
+const description = `Browse all articles tagged with "${tagName}" on ${SITE_CONFIG.name}.`;
+const breadcrumbs = [{ name: 'Tags', url: '/tag/' }, { name: tagName, url: `/tag/${tag}/`, current: true }];
+---
+
+<BaseLayout title={title} description={description} type="website" breadcrumbs={breadcrumbs}>
+  <Breadcrumbs items={breadcrumbs} />
+  <header class="tag-header mb-8">
+    <h1 class={`${LAYOUT_CONFIG.htmlStructure.headingClass} text-3xl md:text-4xl font-bold text-slate-900 mb-4 font-heading`}>Tag: <span class="text-primary-600">{tagName}</span></h1>
+    <p class="text-slate-600">Found <strong>{totalPosts}</strong> {totalPosts === 1 ? 'article' : 'articles'}.</p>
+  </header>
+  {posts.length > 0 ? <div class="posts-list space-y-6">{posts.map(post => <PostCard post={post} variant="horizontal" />)}</div> : <div class="text-center py-16 bg-slate-50 rounded-xl"><p class="text-slate-500">No articles found.</p></div>}
+</BaseLayout>

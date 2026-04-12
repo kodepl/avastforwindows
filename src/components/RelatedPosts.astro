@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { LAYOUT_CONFIG } from '../pbn-config';
+
+interface Props { currentPost: CollectionEntry<'blog'>; }
+const { currentPost } = Astro.props;
+if (!LAYOUT_CONFIG.showRelatedPosts) return null;
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+let relatedPosts: CollectionEntry<'blog'>[] = [];
+
+if (currentPost.data.relatedPosts && currentPost.data.relatedPosts.length > 0) {
+  relatedPosts = allPosts.filter(post => currentPost.data.relatedPosts?.includes(post.slug));
+}
+
+if (relatedPosts.length < LAYOUT_CONFIG.relatedPostsCount && currentPost.data.tags) {
+  const postsByTags = allPosts.filter(post => post.slug !== currentPost.slug).map(post => ({
+    post, matchingTags: post.data.tags?.filter(tag => currentPost.data.tags?.includes(tag)).length || 0,
+  })).filter(item => item.matchingTags > 0).sort((a, b) => b.matchingTags - a.matchingTags).map(item => item.post);
+  for (const post of postsByTags) {
+    if (!relatedPosts.find(p => p.slug === post.slug)) { relatedPosts.push(post); }
+    if (relatedPosts.length >= LAYOUT_CONFIG.relatedPostsCount) break;
+  }
+}
+
+if (relatedPosts.length < LAYOUT_CONFIG.relatedPostsCount) {
+  const recentPosts = allPosts.filter(post => post.slug !== currentPost.slug && !relatedPosts.find(p => p.slug === post.slug)).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, LAYOUT_CONFIG.relatedPostsCount - relatedPosts.length);
+  relatedPosts.push(...recentPosts);
+}
+
+relatedPosts = relatedPosts.slice(0, LAYOUT_CONFIG.relatedPostsCount);
+if (relatedPosts.length === 0) return null;
+---
+
+<aside class="mt-12 pt-8 border-t border-slate-200">
+  <h3 class={`${LAYOUT_CONFIG.htmlStructure.headingClass} text-xl font-bold text-slate-900 mb-6 font-heading`}>Related Articles</h3>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {relatedPosts.map(post => (
+      <article class="group">
+        {post.data.coverImage && (
+          <a href={`/blog/${post.slug}/`} class="block aspect-video rounded-lg overflow-hidden mb-3">
+            <img src={post.data.coverImage} alt={post.data.coverAlt || post.data.title} width={400} height={225} class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
+          </a>
+        )}
+        <h4 class="font-semibold text-slate-900 line-clamp-2 font-heading"><a href={`/blog/${post.slug}/`} class="hover:text-primary-600 transition-colors">{post.data.title}</a></h4>
+        {LAYOUT_CONFIG.showDates && <time datetime={post.data.pubDate.toISOString()} class="text-sm text-slate-500 mt-1 block">{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>}
+      </article>
+    ))}
+  </div>
+</aside>

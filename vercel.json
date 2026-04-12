@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "framework": "astro",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "devCommand": "npm run dev",
+  "routes": [
+    {
+      "src": "/blog$",
+      "dest": "/blog/index.html",
+      "status": 200
+    },
+    {
+      "src": "/tag/(.*)$",
+      "dest": "/tag/$1/index.html",
+      "status": 200
+    },
+    {
+      "src": "/blog/(.*)$",
+      "dest": "/blog/$1/index.html",
+      "status": 200
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}

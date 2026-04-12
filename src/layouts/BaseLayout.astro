@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+import { SITE_CONFIG, LAYOUT_CONFIG } from '../pbn-config';
+import SeoHead from '../components/SeoHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  title: string; description?: string; type?: 'website' | 'article' | 'blog' | 'page';
+  image?: string; imageAlt?: string; article?: CollectionEntry<'blog'>;
+  canonicalUrl?: string; noindex?: boolean; lastmod?: string;
+  breadcrumbs?: Array<{ name: string; url: string }>; extraMeta?: Array<{ name: string; content: string }>;
+  showVideo?: boolean;
+}
+const { title, description, type = 'website', image, imageAlt, article, canonicalUrl, noindex, lastmod, breadcrumbs, extraMeta, showVideo = true } = Astro.props;
+const wrapperClass = LAYOUT_CONFIG.htmlStructure.wrapperClass;
+const mainId = LAYOUT_CONFIG.htmlStructure.mainId;
+---
+
+<!DOCTYPE html>
+<html lang={SITE_CONFIG.language} class="scroll-smooth dark">
+<head>
+  <SeoHead title={title} description={description} type={type} image={image} imageAlt={imageAlt} article={article} canonicalUrl={canonicalUrl} noindex={noindex} lastmod={lastmod} breadcrumbs={breadcrumbs} extraMeta={extraMeta} />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Umami Analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="3a424474-7c9a-4da3-bc2a-dd8896bf7f9e"></script>
+  <link rel="preconnect" href="https://picsum.photos">
+</head>
+<body class="font-body bg-surface text-text-primary antialiased min-h-screen flex flex-col dark relative">
+  
+  {showVideo && (
+    <div class="fixed inset-0 z-0 overflow-hidden">
+      <video 
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        class="w-full h-full object-cover opacity-30"
+        poster="https://picsum.photos/seed/aten-hero/1920/1080"
+      >
+        <source src="/videate.mp4" type="video/mp4">
+      </video>
+      <div class="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/70 to-slate-950/90"></div>
+      <div class="absolute inset-0 bg-gradient-to-br from-violet-950/30 to-transparent"></div>
+    </div>
+  )}
+  
+  <div class="relative z-10 flex flex-col min-h-screen">
+    <Header />
+    <div class={`${wrapperClass} flex-1`}>
+      <div class="container mx-auto px-6 sm:px-8 lg:px-12 py-10 max-w-6xl">
+        <main id={mainId}>
+          <slot />
+        </main>
+      </div>
+    </div>
+    <Footer />
+  </div>
+</body>
+</html>

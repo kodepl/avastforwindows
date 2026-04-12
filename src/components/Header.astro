@@ -1,0 +1,23 @@
+---
+import { SITE_CONFIG, LAYOUT_CONFIG } from '../pbn-config';
+const hasSidebar = LAYOUT_CONFIG.showSidebar && LAYOUT_CONFIG.sidebarPosition !== 'none';
+---
+
+{LAYOUT_CONFIG.headerStyle === 'standard' && (
+  <header class={`${LAYOUT_CONFIG.colors.headerBg} text-white py-4`}>
+    <div class={`container mx-auto px-4 ${hasSidebar ? 'xl:max-w-7xl' : ''}`}>
+      <div class="flex items-center justify-between">
+        <a href="/" class={`${LAYOUT_CONFIG.getPrefixedClass('logo')} text-2xl font-bold font-heading tracking-tight hover:opacity-90 transition-opacity`}>
+          {SITE_CONFIG.name}
+        </a>
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="/" class="text-white/90 hover:text-white font-medium transition-colors">Home</a>
+          <a href="/blog/" class="text-white/90 hover:text-white font-medium transition-colors">Articles</a>
+          <a href="/tag/technology/" class="text-white/90 hover:text-white font-medium transition-colors">Tech</a>
+          <a href="/tag/science/" class="text-white/90 hover:text-white font-medium transition-colors">Science</a>
+          <a href="/tag/lifestyle/" class="text-white/90 hover:text-white font-medium transition-colors">Lifestyle</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+)}

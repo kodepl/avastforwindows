@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { SITE_CONFIG, LAYOUT_CONFIG } from '../../pbn-config';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const title = "All Articles";
+const description = `Browse all ${posts.length} articles on ${SITE_CONFIG.name}. Discover insights on luxury living, refined tastes, and timeless sophistication.`;
+---
+
+<BaseLayout title={title} description={description} type="website">
+  <header class="mb-12 border-b border-amber-900/30 pb-8">
+    <span class="text-amber-500 text-xs font-medium tracking-widest uppercase">Archive</span>
+    <h1 class="text-4xl md:text-5xl font-heading font-normal text-white mt-4">All Articles</h1>
+    <p class="text-slate-400 mt-4 max-w-2xl">Discover <strong class="text-amber-500">{posts.length}</strong> {posts.length === 1 ? 'article' : 'articles'} covering luxury lifestyle, travel, collecting, and refined living.</p>
+  </header>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {posts.map(post => <PostCard post={post} variant="default" />)}
+  </div>
+</BaseLayout>

@@ -1,0 +1,86 @@
+---
+import { SITE_CONFIG, SEO_CONFIG, getFullUrl } from '../pbn-config';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  title: string;
+  description?: string;
+  type?: 'website' | 'article' | 'blog' | 'page';
+  image?: string;
+  imageAlt?: string;
+  article?: CollectionEntry<'blog'>;
+  canonicalUrl?: string;
+  extraMeta?: Array<{ name: string; content: string }>;
+  noindex?: boolean;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  lastmod?: string;
+}
+
+const { title, description = SITE_CONFIG.description, type = 'website', image, imageAlt, article, canonicalUrl, extraMeta = [], noindex = false, breadcrumbs, lastmod } = Astro.props;
+
+const currentUrl = Astro.url.href;
+const canonical = canonicalUrl || currentUrl;
+const fullTitle = SEO_CONFIG.defaultTitle.includes('%s') ? SEO_CONFIG.defaultTitle.replace('%s', title) : `${title} | ${SITE_CONFIG.name}`;
+const metaDescription = description.length > 160 ? description.slice(0, 157) + '...' : description;
+const ogImage = image || SEO_CONFIG.defaultOgImage;
+const ogImageUrl = ogImage?.startsWith('http') ? ogImage : getFullUrl(ogImage || '/og-default.jpg');
+const ogImageAlt = imageAlt || title;
+
+const websiteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE_CONFIG.name, url: SITE_CONFIG.url, description: SITE_CONFIG.description };
+const organizationSchema = { '@context': 'https://schema.org', '@type': 'Organization', name: SITE_CONFIG.organization.name, url: SITE_CONFIG.url, logo: getFullUrl(SITE_CONFIG.organization.logo), email: SITE_CONFIG.organization.email, sameAs: SITE_CONFIG.organization.sameAs };
+
+let articleSchema: Record<string, any> | null = null;
+if (article && type === 'article') {
+  const data = article.data;
+  articleSchema = { '@context': 'https://schema.org', '@type': 'Article', headline: data.seoTitle || data.title, description: data.seoDescription || data.description || metaDescription, image: data.coverImage ? (data.coverImage.startsWith('http') ? data.coverImage : getFullUrl(data.coverImage)) : ogImageUrl, datePublished: data.pubDate.toISOString(), dateModified: data.updatedDate?.toISOString() || data.pubDate.toISOString(), author: { '@type': 'Person', name: data.author }, publisher: { '@type': 'Organization', name: SITE_CONFIG.organization.name, logo: { '@type': 'ImageObject', url: getFullUrl(SITE_CONFIG.organization.logo) } }, mainEntityOfPage: { '@type': 'WebPage', '@id': canonical } };
+}
+
+let breadcrumbSchema: Record<string, any> | null = null;
+if (breadcrumbs && breadcrumbs.length > 0) {
+  breadcrumbSchema = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: breadcrumbs.map((crumb, index) => ({ '@type': 'ListItem', position: index + 1, name: crumb.name, item: crumb.url.startsWith('http') ? crumb.url : getFullUrl(crumb.url) })) };
+}
+
+const webPageSchema = { '@context': 'https://schema.org', '@type': 'WebPage', name: title, description: metaDescription, url: canonical, isPartOf: { '@type': 'WebSite', name: SITE_CONFIG.name, url: SITE_CONFIG.url } };
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>{fullTitle}</title>
+<meta name="description" content={metaDescription} />
+<meta name="author" content={article?.data.author || SITE_CONFIG.organization.name} />
+<meta name="copyright" content={`© ${new Date().getFullYear()} ${SITE_CONFIG.organization.name}`} />
+<meta name="language" content={SITE_CONFIG.language} />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : article?.data.robots || SEO_CONFIG.robotsDefault} />
+<meta name="generator" content={Astro.generator} />
+{extraMeta.map((meta) => <meta name={meta.name} content={meta.content} />)}
+<link rel="canonical" href={canonical} />
+<meta property="og:site_name" content={SITE_CONFIG.name} />
+<meta property="og:title" content={article?.data.seoTitle || title} />
+<meta property="og:description" content={metaDescription} />
+<meta property="og:type" content={type === 'article' ? 'article' : 'website'} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={SITE_CONFIG.language} />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:alt" content={ogImageAlt} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+{article && (<><meta property="article:published_time" content={article.data.pubDate.toISOString()} />{article.data.updatedDate && <meta property="article:modified_time" content={article.data.updatedDate.toISOString()} />}<meta property="article:author" content={article.data.author} />{article.data.tags?.map((tag) => <meta property="article:tag" content={tag} />)}</>)}
+<meta name="twitter:card" content={SEO_CONFIG.twitterCardType} />
+{SEO_CONFIG.twitterHandle && <meta name="twitter:site" content={SEO_CONFIG.twitterHandle} />}
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={metaDescription} />
+<meta name="twitter:image" content={ogImageUrl} />
+<meta name="twitter:image:alt" content={ogImageAlt} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+{SEO_CONFIG.googleSiteVerification && <meta name="google-site-verification" content={SEO_CONFIG.googleSiteVerification} />}
+{type === 'website' && <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />}
+<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+{articleSchema && <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />}
+{breadcrumbSchema && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />}
+<script type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://picsum.photos" />

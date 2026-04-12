@@ -1,0 +1,62 @@
+# Schlosser Digest
+
+Premium lifestyle website built with Astro and Tailwind CSS.
+
+## 🚀 Deployment
+
+### Netlify (Recommended)
+
+#### Option 1: Git Integration
+1. Push code to GitHub
+2. Go to https://app.netlify.com/start
+3. Connect to Git provider
+4. Select repository `kodepl/shclosser`
+5. Build settings:
+   - **Build command:** `npm run build`
+   - **Publish directory:** `dist`
+6. Click **Deploy site**
+
+#### Option 2: Drag & Drop
+1. Run `npm run build` locally
+2. Drag `dist/` folder to https://app.netlify.com/drop
+
+#### Option 3: Netlify CLI
+```bash
+npm install -g netlify-cli
+netlify login
+netlify deploy --prod --dir=dist
+```
+
+### Environment Variables
+- `NODE_VERSION`: 18
+
+## 📝 Content
+
+- **30 articles** on luxury lifestyle
+- Dark premium theme
+- Fullscreen video hero
+
+## 🎨 Design
+
+- Dark theme (slate/amber/gold)
+- Merriweather + Work Sans fonts
+- Luxury aesthetic
+
+## 📊 Stats
+
+- 30 articles
+- Dynamic sitemap
+- Umami analytics
+- SEO optimized
+
+## 🛠️ Commands
+
+```bash
+npm install
+npm run dev
+npm run build
+```
+
+## 📦 Site URL
+
+https://schlosser.biz

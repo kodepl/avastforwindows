@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import { LAYOUT_CONFIG, SITE_CONFIG } from '../pbn-config';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 5);
+
+const tagCounts = new Map<string, number>();
+allPosts.forEach(post => { post.data.tags?.forEach(tag => { tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1); }); });
+
+const sortedTags = Array.from(tagCounts.entries()).sort((a, b) => b[1] - a[1]).slice(0, LAYOUT_CONFIG.maxTagsInCloud).map(([tag]) => tag);
+
+if (!LAYOUT_CONFIG.showSidebar || LAYOUT_CONFIG.sidebarPosition === 'none') return null;
+
+const sidebarClasses = `${LAYOUT_CONFIG.getPrefixedClass('sidebar')} ${LAYOUT_CONFIG.colors.sidebarBg} p-6 rounded-xl space-y-8`;
+---
+
+<aside class={sidebarClasses}>
+  <div class={LAYOUT_CONFIG.getPrefixedClass('widget')}>
+    <h3 class={`${LAYOUT_CONFIG.htmlStructure.headingClass} text-lg font-bold text-slate-900 mb-4 font-heading`}>About {SITE_CONFIG.name}</h3>
+    <p class="text-slate-600 text-sm leading-relaxed">{SITE_CONFIG.description}</p>
+  </div>
+
+  {recentPosts.length > 0 && (
+    <div class={LAYOUT_CONFIG.getPrefixedClass('widget')}>
+      <h3 class={`${LAYOUT_CONFIG.htmlStructure.headingClass} text-lg font-bold text-slate-900 mb-4 font-heading`}>Recent Articles</h3>
+      <ul class="space-y-3">
+        {recentPosts.map(post => (
+          <li>
+            <a href={`/blog/${post.slug}/`} class={`block text-sm ${LAYOUT_CONFIG.colors.linkColor} ${LAYOUT_CONFIG.colors.linkHover} transition-colors`}>
+              <span class="font-medium line-clamp-2">{post.data.title}</span>
+              {LAYOUT_CONFIG.showDates && <span class="text-slate-400 text-xs mt-1 block">{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  {LAYOUT_CONFIG.showTags && sortedTags.length > 0 && (
+    <div class={LAYOUT_CONFIG.getPrefixedClass('widget')}>
+      <h3 class={`${LAYOUT_CONFIG.htmlStructure.headingClass} text-lg font-bold text-slate-900 mb-4 font-heading`}>Popular Tags</h3>
+      <div class="flex flex-wrap gap-2">
+        {sortedTags.map(tag => (
+          <a href={`/tag/${tag.toLowerCase().replace(/\s+/g, '-')}/`} class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-white border border-slate-200 text-slate-600 hover:text-primary-600 hover:border-primary-300 transition-colors">{tag} <span class="ml-1 text-slate-400">({tagCounts.get(tag)})</span></a>
+        ))}
+      </div>
+    </div>
+  )}
+</aside>

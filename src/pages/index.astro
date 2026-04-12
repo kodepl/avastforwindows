@@ -1,0 +1,145 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { SITE_CONFIG, LAYOUT_CONFIG } from '../pbn-config';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+let featuredPost = null;
+let regularPosts = posts;
+
+if (posts.length > 0) {
+  featuredPost = posts.find(p => p.data.featured) || posts[0];
+  regularPosts = posts.filter(p => p.slug !== featuredPost?.slug);
+}
+---
+
+<BaseLayout title={SITE_CONFIG.name} description={SITE_CONFIG.description} type="website" showVideo={true}>
+  <!-- Hero Section -->
+  <section class="relative min-h-[70vh] flex items-center justify-center text-center mb-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm mb-8">
+        <span class="w-2 h-2 rounded-full bg-violet-400 animate-pulse"></span>
+        Insights & Perspectives
+      </div>
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white mb-6 leading-tight tracking-tight">
+        Atenololn
+        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-teal-400">Review</span>
+      </h1>
+      <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed mb-10">
+        {SITE_CONFIG.description}
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="#articles" class="inline-flex items-center px-8 py-4 bg-violet-600 hover:bg-violet-500 text-white font-medium rounded-lg transition-all hover:scale-105">
+          Explore Articles
+          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </a>
+        <a href="/blog" class="inline-flex items-center px-8 py-4 bg-slate-800/50 hover:bg-slate-800 text-white font-medium rounded-lg transition-all border border-slate-700">
+          View All
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <section class="border-y border-violet-800/20 py-8 mb-16 bg-slate-950/30 backdrop-blur-sm">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div>
+        <div class="text-3xl font-heading font-bold text-violet-400">{posts.length}+</div>
+        <div class="text-sm text-slate-400 mt-1">Articles</div>
+      </div>
+      <div>
+        <div class="text-3xl font-heading font-bold text-teal-400">Daily</div>
+        <div class="text-sm text-slate-400 mt-1">Updates</div>
+      </div>
+      <div>
+        <div class="text-3xl font-heading font-bold text-pink-400">Expert</div>
+        <div class="text-sm text-slate-400 mt-1">Insights</div>
+      </div>
+      <div>
+        <div class="text-3xl font-heading font-bold text-amber-400">Global</div>
+        <div class="text-sm text-slate-400 mt-1">Reach</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Post -->
+  {featuredPost && (
+    <section class="mb-20">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="h-px flex-1 bg-gradient-to-r from-transparent to-violet-800/50"></div>
+        <span class="text-violet-400 text-sm font-medium tracking-wider uppercase">Featured</span>
+        <div class="h-px flex-1 bg-gradient-to-l from-transparent to-violet-800/50"></div>
+      </div>
+      <a href={`/blog/${featuredPost.slug}/`} class="group block">
+        <article class="relative rounded-2xl overflow-hidden border border-violet-800/20 bg-slate-900/40 backdrop-blur-sm">
+          <div class="grid md:grid-cols-2 gap-0">
+            <div class="aspect-video md:aspect-auto overflow-hidden">
+              <img 
+                src={featuredPost.data.coverImage} 
+                alt={featuredPost.data.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+            </div>
+            <div class="p-8 md:p-12 flex flex-col justify-center">
+              <span class="text-violet-400 text-sm font-medium tracking-wider uppercase mb-4">{featuredPost.data.category}</span>
+              <h2 class="text-3xl md:text-4xl font-heading font-bold text-white mb-4 group-hover:text-violet-300 transition-colors leading-tight">
+                {featuredPost.data.title}
+              </h2>
+              <p class="text-slate-400 text-lg leading-relaxed mb-6">{featuredPost.data.description}</p>
+              <div class="flex items-center gap-4 text-sm text-slate-500">
+                <span>{featuredPost.data.author}</span>
+                <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+                <time datetime={featuredPost.data.pubDate.toISOString()}>
+                  {featuredPost.data.pubDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                </time>
+              </div>
+            </div>
+          </div>
+        </article>
+      </a>
+    </section>
+  )}
+
+  <!-- Articles Grid -->
+  <section id="articles" class="py-8">
+    <div class="flex items-center justify-between mb-10">
+      <h2 class="text-2xl font-heading font-bold text-white">Latest Articles</h2>
+      <a href="/blog" class="text-violet-400 hover:text-violet-300 text-sm font-medium transition-colors">
+        View All →
+      </a>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {regularPosts.slice(0, 8).map(post => <PostCard post={post} variant="default" />)}
+    </div>
+    
+    {regularPosts.length > 8 && (
+      <div class="text-center mt-12">
+        <a href="/blog" class="inline-flex items-center px-6 py-3 border border-violet-800/50 text-violet-300 hover:bg-violet-900/20 rounded-lg transition-colors">
+          View All {regularPosts.length} Articles
+        </a>
+      </div>
+    )}
+  </section>
+
+  <!-- Newsletter -->
+  <section class="mt-20 p-8 md:p-12 rounded-2xl bg-gradient-to-br from-violet-900/20 to-slate-900/40 border border-violet-800/20 backdrop-blur-sm">
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="text-3xl font-heading font-bold text-white mb-4">Stay Informed</h2>
+      <p class="text-slate-400 mb-8">Get the latest insights delivered to your inbox. No spam, just quality content.</p>
+      <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+        <input 
+          type="email" 
+          placeholder="Enter your email" 
+          class="flex-1 px-5 py-3 bg-slate-950/50 border border-violet-800/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-violet-500"
+        />
+        <button type="submit" class="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white font-medium rounded-lg transition-colors">
+          Subscribe
+        </button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
