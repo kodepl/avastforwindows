@@ -31,7 +31,7 @@ Several Chrome extensions specialise in turning HTML tables into downloadable CS
 
 ### Table Capture
 
-The most capable option for frequent table extraction is <a href="https://tablecapture.co/"><strong>Table Capture for Chrome</strong></a>. It detects tables on the current page, lets you choose the one you want, and exports it as CSV, tab-separated values, or HTML. The extension works well on pages with multiple tables because it shows a preview of each one before you commit.
+The most capable option for frequent table extraction is [**Table Capture for Chrome**](https://tablecapture.co/). It detects tables on the current page, lets you choose the one you want, and exports it as CSV, tab-separated values, or HTML. The extension works well on pages with multiple tables because it shows a preview of each one before you commit.
 
 You can find it in the <a href="https://chrome.google.com/webstore/">Chrome Web Store</a>, where it is listed among the productivity extensions. The interface is straightforward. After installing it, a small icon appears in the toolbar. Click it when you are on a page with a table, select the table number, and choose your preferred format. The file downloads immediately. For anyone who regularly pulls data from websites into spreadsheets, this is the tool to start with.
 
@@ -77,6 +77,6 @@ Be cautious with extensions that request permission to read all websites when th
 
 ## Final thoughts
 
-Extracting data from HTML tables does not have to be frustrating. The right Chrome extension turns a five-minute cleanup job into a single click. Start with <a href="https://tablecapture.co/"><strong>Table Capture for Chrome</strong></a> for a polished, reliable experience, then fall back to Instant Data Scraper or Table to CSV when the page structure is unusual. Combine the export with a clean import process in Google Sheets or Excel, and your data workflow becomes much smoother.
+Extracting data from HTML tables does not have to be frustrating. The right Chrome extension turns a five-minute cleanup job into a single click. Start with [**Table Capture for Chrome**](https://tablecapture.co/) for a polished, reliable experience, then fall back to Instant Data Scraper or Table to CSV when the page structure is unusual. Combine the export with a clean import process in Google Sheets or Excel, and your data workflow becomes much smoother.
 
 Just remember to keep an eye on permissions and to use official export features when they are available. With those precautions, browser-based table capture is a practical tool for anyone who works with data from the web.
